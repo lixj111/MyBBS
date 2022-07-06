@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/axios.js"></script>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/elementui.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script><!-- 在线JQuery工具 -->
+    <link rel="stylesheet" href="./lib/elementui.css">
+</head>
+<body>
+    <div id="registPage">
+        <div class="regist-pad">
+            <h2>用户注册</h2>
+            <el-input placeholder="请输入账号" v-model="userNo">
+                <template slot="prepend">账号</template>
+            </el-input>
+            <el-input placeholder="请输入登录账号" v-model="userName">
+                <template slot="prepend">账号名</template>
+            </el-input>
+            <el-input placeholder="请输入登录密码" v-model="password" show-password>
+                <template slot="prepend">密码</template>
+            </el-input>
+            <el-input placeholder="请再次输入登录密码" v-model="password2" show-password>
+                <template slot="prepend">密码</template>
+            </el-input>
+            <p>
+                <el-button type="primary" @click="regist">注册</el-button>
+            </p>
+            
+        </div>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#registPage",
+        data:{
+            userNo:"",
+            userName:"",
+            password:"",
+            password2:""
+        },
+        methods: {
+            regist:function(){
+                // $.post("http://localhost:5000/Login/Insert",//ajax方法，传的时form表单形式的数据。后端[apicontroller]去掉可运行
+                // {
+                //     userNo:this.userNo,
+                //     userName:this.userName,
+                //     password:this.password
+                // }),(function(res){
+                //     console.log(res);
+                // }),
+                axios.post("http://localhost:5000/Login",//axios方法，传的是Json格式数据。在后端要用对象模型做参数
+                {
+                    userNo:this.userNo,//键值对，路由中的key对应网页中相应的value
+                    userName:this.userName,
+                    password:this.password
+                }).then(function(res){
+                    console.log(res);
+                    alert("111");
+                })
+            }
+        },
+    })
+</script>
+<style>
+    .regist-pad{
+        width: 600px;
+        padding: 20px;
+        margin: auto;
+        margin-top: 10%;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-shadow: 0 0 10px #ccc;
+    }
+    h2{
+        text-align: center;
+        margin-top: 0;
+    }
+    .el-input{
+        margin-bottom: 20px;
+    }
+
+    .regist-pad p{
+        text-align: center;
+    }
+    .regist-pad p .el-button{
+        width: 90%;
+
+    }
+</style>
+</html>

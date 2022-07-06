@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script><!--js语言是解释性语言，从上到下依次执行的-->
+    <!-- 依赖的包必须出现在前面 -->
+    <script src="./lib/elementui.js"></script><!--elementui包依赖于vue包-->
+    <link rel="stylesheet" href="./lib/elementui.css">
+</head>
+<body>
+    <div id="postList">
+        <div class="header"><!-- 页面导航栏 -->
+            <div class="not-login" v-if="userName==null">
+                <span><a href="Login.html" style="color: #eee">登录</a></span>
+                <span>注册</span>
+            </div>
+            <div class="logined" v-else>
+                <span>{{userName}}</span>
+                <span @click="login_out">注销</span>
+            </div>
+        </div>
+        <div class="plate-show">
+            <div class="navi"></div>
+            <div class="backgroup">
+                <img src="./assets/images/120255ccxhvvggvtvconrr.png" alt="">
+                <h2>《全面战争：三国》等你来战</h2>
+            </div>
+        </div>
+        <div class="send-post">
+            <el-button type="primary">发帖</el-button>
+        </div>
+        <div class="post-list">
+            <table>
+                <thead><!--表头-->
+                    <tr><!--一行-->
+                        <td colspan="2"><!--td表示一个单元格，colspan=2表示跨两个单元格-->
+                            <span>全部主题</span>
+                            <span>最新</span>
+                            <span>热门</span>
+                            <span>热帖</span>
+                            <span>精华</span>
+                        </td>
+                        <td>作者</td>
+                        <td>回复/查看</td>
+                        <td>最后发表</td>
+                    </tr>
+                </thead>
+                <tbody><!--表身-->
+                    <tr>
+                        <td style="width: 52px;padding-left: 10px;"><img src="./assets/images/folder_new.gif"></td>
+                        <td><span><a class="post-type" href="javascript:;">[帖子种类]</a></span>
+                            <a href="./PostDetail.html"> 帖子标题</a>
+                        </td>
+                        <td style="width: 135px;">
+                            <p>leo</p><!--p：段落标签，实现换行-->
+                            <p>2022-6-24 14：30</p>
+                        </td>
+                        <td style="width: 66px;">
+                            <p>996</p>
+                            <p>1007</p>
+                        </td>
+                        <td style="width: 135px;">
+                            <p>lee</p>
+                            <p>2022-6-24 14:40</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 52px;padding-left: 10px;"><img src="./assets/images/folder_new.gif"></td>
+                        <td><span>[帖子种类]</span> 帖子标题</td>
+                        <td style="width: 135px;">
+                            <p>leo</p><!--p：段落标签，实现换行-->
+                            <p>2022-6-24 14：30</p>
+                        </td>
+                        <td style="width: 66px;">
+                            <p>996</p>
+                            <p>1007</p>
+                        </td>
+                        <td style="width: 135px;">
+                            <p>lee</p>
+                            <p>2022-6-24 14:40</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 52px;padding-left: 10px;"><img src="./assets/images/folder_new.gif"></td>
+                        <td><span>[帖子种类]</span> 帖子标题</td>
+                        <td style="width: 135px;">
+                            <p>leo</p><!--p：段落标签，实现换行-->
+                            <p>2022-6-24 14：30</p>
+                        </td>
+                        <td style="width: 66px;">
+                            <p>996</p>
+                            <p>1007</p>
+                        </td>
+                        <td style="width: 135px;">
+                            <p>lee</p>
+                            <p>2022-6-24 14:40</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 52px;padding-left: 10px;"><img src="./assets/images/folder_new.gif"></td>
+                        <td><span>[帖子种类]</span> 帖子标题</td>
+                        <td style="width: 135px;">
+                            <p>leo</p><!--p：段落标签，实现换行-->
+                            <p>2022-6-24 14：30</p>
+                        </td>
+                        <td style="width: 66px;">
+                            <p>996</p>
+                            <p>1007</p>
+                        </td>
+                        <td style="width: 135px;">
+                            <p>lee</p>
+                            <p>2022-6-24 14:40</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="post-page">
+            <el-pagination background layout="prev, pager, next" :page-size="30" :total="1000">
+            </el-pagination>
+        </div>
+    </div>
+</body>
+<script>
+    new Vue({/*渲染样式，使引用的elementui显示*/
+        el:"#postList",
+        data:{
+            userName:sessionStorage["userName"]
+        },
+        methods: {
+            login_out:function(){
+                localStorage.clear();
+                sessionStorage.clear();
+                this.userName=null;
+            }
+        },
+    })
+</script>
+<style>
+    *{/* 取消浏览器自带的边距格式 */
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;/*让页面的宽度包含内边距及其他边距 */
+    }
+    a{
+        text-decoration: none;/*本身不产生任何修饰*/
+        color:#333;
+    }
+    a.post-type{
+        color: blue;
+    }
+    a:hover{/*hover：鼠标放上时触发*/
+        text-decoration: underline;
+    }
+    .header{
+        width: 100%;
+        height: 36px;
+        /* padding-top: 7px; */
+        line-height: 36px;/*行高等于本身高度，内容上下居中*/
+        padding-right: 10px;
+        background-color: #000;
+        text-align: right;/*对齐格式*/
+    }
+    .header .not-login span,
+    .header .logined span{
+        color: #fff;
+    }
+    .header .logined span
+    .plate-show{
+        width: 98%;
+        margin: 20px auto;
+        /* margin: 20px 10px 5px 1px;上右下左 */
+        /* margin: 20px 10px; 上下20px，左右10px*/
+        /* margin: 10px auto; 上下10px,左右自适应 */
+        border: 1px solid #ccc;/* 边框：1像素 solid实现 颜色#ccc*/
+    }
+    .plate-show .navi{
+        height: 36px;
+    }
+    .plate-show .backgroup{
+        text-align: center;
+    }
+    .plate-show .backgroup h2{  /* .h2错误，h2是标签，不需要加. */
+        color: blue;
+        margin: 10px 0;
+    }
+    .send-post{
+        width: 98%;
+        margin: auto;
+    }
+    .post-list
+    {
+        width: 98%;
+        margin: 16px auto;
+        border: 1px solid #ccc;
+        border-bottom: 0 none;
+    }
+    .post-list table{
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+    }
+    .post-list table thead tr td{
+        background-color: #eee;
+        height: 40px;
+    }
+    .post-list table thead tr td span{
+        margin-left: 16px;
+        color: blue;
+    }
+    .post-list table tr td{
+        border-bottom: 1px solid #ccc;
+        height: 40px;
+    }
+    .post-list table tr td span{
+        color: blue;
+        padding-right: 10px;
+    }
+    .post-list table tr td p:last-child{/*p:last-child表示最后一个段落*/
+        color: #999;
+    }
+    .post-page{
+        text-align: right;
+        margin-bottom: 36px;
+    }
+</style>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/axios.js"></script>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/elementui.js"></script>
+    <link rel="stylesheet" href="./lib/elementui.css">
+</head>
+<body>
+    <!-- vue指令 -->
+    <!-- v-model:数据双向绑定 -->
+    <!-- v-bind:数据（单项）绑定 -->
+    <!-- v-on 事件 -->
+    <div id="LoginPage">
+        <h3>
+            用户登录
+        </h3>
+        <p>
+            <el-input placeholder="请输入登录账号" v-model="userName">
+                <template slot="prepend">账号</template>
+            </el-input>
+        </p>
+        <p>
+            <el-input placeholder="请输入登录密码" v-model="password" show-password>
+                <template slot="prepend">密码</template>
+            </el-input>
+        </p>
+        <p>
+            <!-- `checked` 为 true 或 false -->
+            <el-checkbox v-model="remMe">记住我</el-checkbox>
+        </p>
+        <p>
+            <el-button type="primary" v-on:click="login">登录</el-button>
+            <el-button type="info" v-on:click="back">返回</el-button>
+        </p>
+        <!-- <input type="text" v-bind:value="msg"> -->
+        <!-- <input type="text" v-model="msg"> 
+        {{msg}} -->
+    </div>
+</body>
+<script>
+    //网站挂载完成，虚拟DOM概念……
+    var vm =new Vue({
+        el:"#LoginPage",
+        data:{
+            // msg:"hello"
+            userName:"",
+            password:"",
+            remMe:false
+        },
+        //委托就是用一个变量接受一个函数（方法）
+        // function fun(){
+        //     console.console.log("hello");
+        // }
+        // var funvalue =function;
+        // funvalue();
+        
+        //网站挂载完成，虚拟DOM概念……
+        //mounted函数相当于winform中的PageLoad函数，加载时自动触发
+        mounted() {
+            var userInfo = JSON.parse(localStorage["userInfo"]);//解序列化，将序列转化为对象
+            this.userName = userInfo.userName;
+            this.password = userInfo.password;
+            //js中string转bool
+            //this.remMe = localStorage["remMe"];//传给remMe的是string类型的值
+            this.remMe = localStorage["remMe"]=="true"?true:false;//转换方法1
+            //方法2，boolea（）函数，参数为int类型0和字符串null时转为false，参数为!=0和非空字符串时转换为true
+            //方法2本案例中较麻烦，还是用方法1
+
+        },
+
+        methods:{
+            login:function(){//没有取名就是匿名函数
+                var userInfo = {//内存优化，将多条/同一类记录集中在一条记录中
+                    userName:"",
+                    password:""
+                }
+                var userName=this.userName;
+                var password=this.password;
+                var remMe=this.remMe;
+                //axios.get("http://localhost:5000/Login/Get?username="+userName+"&password="+password).then(function(res){
+                axios.get("http://localhost:5000/Login/"+userName+"/"+password+""
+                //axios.get(`http://localhost:5000/Login/${userName}/${password}/`
+                ).then(function(res){
+                    localStorage["token"]=res.data.token;//大写的Token（包括其他所有属性）,在前端都变小写开头
+                    sessionStorage["userName"]=res.data.userName;//用作跨页面联动。会话级存储，关闭浏览器后就清空
+                    localStorage["remMe"]=remMe;//存储进来的remMe是string类型
+                    if(remMe){//登陆时选择记住账号密码，将账号密码存在浏览器中
+                        userInfo.userName=userName;
+                        userInfo.password=res.data.autoLoginTag;
+                        localStorage["userInfo"]=JSON.stringify(userInfo);//JSON序列化，否则看到的是{Object，Object}
+                    }else{
+                        //localStorage.clear();//清除所有
+                        localStorage.removeItem("userInfo");
+                    }
+                    //alert("SUCCESS");
+                    //console.log(res.data);
+                    location.href="PostList.html";//跳转
+                })
+                //参数的多种传值方式
+                //restful风格路由
+                // axios.get("http://localhost:5000/Login/Get?username=&password=",{params{userName,password}}).then(function(res){
+                //     console.log(res);
+                // })
+                //{params{userName:userName,password:password}}   后端变量名:前端变量名-- 前后端变量名一致时可只写一个
+            },
+            back:function(){
+                history.go(-1);//返回上一页
+            }
+        }
+    })
+</script>
+<style>
+    *{
+        margin: 0;
+        position: 0;
+    }
+    #LoginPage{
+        width: 600px;
+        height: 300px;
+        box-shadow: 0 0 10px #666;/*边框阴影：x轴偏移、y轴偏移、阴影宽度、阴影颜色*/
+        margin: auto;
+        margin-top: 10%;
+    }
+    #LoginPage h3{
+        text-align: center;
+        padding: 20px 0;
+    }
+    #LoginPage p{
+        width: 70%;
+        margin: auto;
+        margin-bottom: 20px;
+    }
+    #LoginPage p:last-child{
+        text-align: center;
+    }
+    #LoginPage p button{
+        width: 45%;
+    }
+</style>
+</html>
